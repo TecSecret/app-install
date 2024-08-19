@@ -11,7 +11,9 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_PASSWORD=99671886
+      POSTGRES_DB: evolution # Nome do banco de dados
+      POSTGRES_USER: evolution # Nome do usuário do banco de dados
+      POSTGRES_PASSWORD: evolution # Senha do banco de dados
     volumes:
       - postgres_data:/var/lib/postgresql/data
     expose:

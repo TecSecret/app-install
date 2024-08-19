@@ -1,25 +1,102 @@
-version: '3.3'
+version: "3.7"
+
+## --------------------------- PACK TYPEBOT --------------------------- ##
 
 services:
-  api:
-    container_name: evolution_api
-    image: atendai/evolution-api:v2.0.10
-    restart: always
-    ports:
-      - 8080:8080
-    volumes:
-      - evolution_instances:/evolution/instances
+  evolution2:
+    image: atendai/evolution-api:v2.0.10 # Imagem do serviço evolution-api
     networks:
-      - evolution-net
-    env_file:
-      - .env
-    expose:
-      - 8080
+      - evolution # Nome da rede interna
+    environment: # Variáveis de ambiente para configurar o serviço
+      - SERVER_URL=https://wa.api.rodadecuia.com.br # URL do servidor
+      - LANGUAGE=pt-BR # Idioma configurado para pt-BR (português do Brasil)
+      - AUTHENTICATION_TYPE=apikey # Tipo de autenticação configurada como apikey
+      - AUTHENTICATION_API_KEY=16fdf9c0422199c901f2510ce980db37 # Chave de API para autenticação
+      - AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=false # Não expor a autenticação ao buscar instâncias
+      - CONFIG_SESSION_PHONE_CLIENT=Evolution # Nome do cliente de telefone na sessão
+      - CONFIG_SESSION_PHONE_NAME=Chrome # Nome do navegador de telefone na sessão
+      - PROVIDER_ENABLED=false # Provedor desativado
+      - PROVIDER_HOST=127.0.0.1 # Host do provedor configurado para localhost
+      - PROVIDER_PORT=5656 # Porta do provedor
+      - PROVIDER_PREFIX=evolution # Prefixo do provedor
+      - WA_BUSINESS_TOKEN_WEBHOOK=evolution # Token de webhook do WhatsApp Business
+      - WA_BUSINESS_URL=https://graph.facebook.com # URL da API do WhatsApp Business
+      - WA_BUSINESS_VERSION=v18.0 # Versão da API do WhatsApp Business
+      - WA_BUSINESS_LANGUAGE=pt_BR # Idioma configurado para pt_BR
+      - QRCODE_LIMIT=30 # Limite de QR codes
+      - QRCODE_COLOR=#000000 # Cor do QR code
+      - RABBITMQ_ENABLED=false # RabbitMQ desativado
+      - RABBITMQ_URI=amqp://USER:PASS@rabbit_mq:5672 # URI do RabbitMQ (desativado)
+      - RABBITMQ_EXCHANGE_NAME=evolution # Nome da exchange do RabbitMQ (desativado)
+      - RABBITMQ_GLOBAL_ENABLED=true # RabbitMQ global ativado
+      - DATABASE_ENABLED=true # Banco de dados ativado
+      - DATABASE_PROVIDER=postgresql # Provedor de banco de dados configurado para PostgreSQL
+      - DATABASE_CONNECTION_URI=postgresql://evolution:evolution@postgres:5432/evolution?schema=public # URI de conexão do banco de dados PostgreSQL
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution # Nome do cliente de conexão do banco de dados
+      - DATABASE_SAVE_DATA_INSTANCE=true # Salvar dados da instância no banco de dados
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true # Salvar novos dados de mensagens no banco de dados
+      - DATABASE_SAVE_MESSAGE_UPDATE=true # Salvar atualizações de mensagens no banco de dados
+      - DATABASE_SAVE_DATA_CONTACTS=true # Salvar dados de contatos no banco de dados
+      - DATABASE_SAVE_DATA_CHATS=true # Salvar dados de chats no banco de dados
+      - CACHE_REDIS_ENABLED=false # Redis desativado
+      - CACHE_REDIS_URI=redis://redis:6379/5 # URI do Redis (desativado)
+      - CACHE_REDIS_PREFIX_KEY=evolution # Prefixo de chave do Redis (desativado)
+      - CACHE_REDIS_TTL=604800 # Tempo de vida do cache do Redis (desativado)
+      - CACHE_REDIS_SAVE_INSTANCES=false # Salvar instâncias no Redis (desativado)
+      - CACHE_LOCAL_ENABLED=true # Cache local ativado
+      - CACHE_LOCAL_TTL=604800 # Tempo de vida do cache local
+      - TYPEBOT_ENABLED=true # Typebot ativado
+      - TYPEBOT_API_VERSION=latest # Versão da API do Typebot configurada para a mais recente
+      - CHATWOOT_ENABLED=true # Chatwoot ativado
+      - CHATWOOT_MESSAGE_DELETE=true # Permitir deletar mensagens no Chatwoot
+      - CHATWOOT_MESSAGE_READ=true # Permitir ler mensagens no Chatwoot
+      - WEBHOOK_GLOBAL_ENABLED=false # Webhook global desativado
+      - WEBHOOK_GLOBAL_URL='' # URL do webhook global (vazia)
+      - WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS=false # Webhook global por eventos desativado
+      - WEBHOOK_EVENTS_APPLICATION_STARTUP=false # Evento de inicialização da aplicação desativado
+      - WEBHOOK_EVENTS_QRCODE_UPDATED=true # Evento de atualização do QR code ativado
+      - WEBHOOK_EVENTS_MESSAGES_SET=true # Evento de configuração de mensagens ativado
+      - WEBHOOK_EVENTS_MESSAGES_UPSERT=true # Evento de upsert de mensagens ativado
+      - WEBHOOK_EVENTS_MESSAGES_EDITED=true # Evento de edição de mensagens ativado
+      - WEBHOOK_EVENTS_MESSAGES_UPDATE=true # Evento de atualização de mensagens ativado
+      - WEBHOOK_EVENTS_MESSAGES_DELETE=true # Evento de deleção de mensagens ativado
+      - WEBHOOK_EVENTS_SEND_MESSAGE=true # Evento de envio de mensagens ativado
+      - WEBHOOK_EVENTS_CONTACTS_SET=true # Evento de configuração de contatos ativado
+      - WEBHOOK_EVENTS_CONTACTS_UPSERT=true # Evento de upsert de contatos ativado
+      - WEBHOOK_EVENTS_CONTACTS_UPDATE=true # Evento de atualização de contatos ativado
+      - WEBHOOK_EVENTS_PRESENCE_UPDATE=true # Evento de atualização de presença ativado
+      - WEBHOOK_EVENTS_CHATS_SET=true # Evento de configuração de chats ativado
+      - WEBHOOK_EVENTS_CHATS_UPSERT=true # Evento de upsert de chats ativado
+      - WEBHOOK_EVENTS_CHATS_UPDATE=true # Evento de atualização de chats ativado
+      - WEBHOOK_EVENTS_CHATS_DELETE=true # Evento de deleção de chats ativado
+      - WEBHOOK_EVENTS_GROUPS_UPSERT=true # Evento de upsert de grupos ativado
+      - WEBHOOK_EVENTS_GROUPS_UPDATE=true # Evento de atualização de grupos ativado
+      - WEBHOOK_EVENTS_GROUP_PARTICIPANTS_UPDATE=true # Evento de atualização de participantes de grupos ativado
+      - WEBHOOK_EVENTS_CONNECTION_UPDATE=true # Evento de atualização de conexão ativado
+      - WEBHOOK_EVENTS_LABELS_EDIT=true # Evento de edição de etiquetas ativado
+      - WEBHOOK_EVENTS_LABELS_ASSOCIATION=true # Evento de associação de etiquetas ativado
+      - WEBHOOK_EVENTS_CALL=true # Evento de chamadas ativado
+      - WEBHOOK_EVENTS_TYPEBOT_START=false # Evento de início do Typebot desativado
+      - WEBHOOK_EVENTS_TYPEBOT_CHANGE_STATUS=false # Evento de mudança de status do Typebot desativado
+      - WEBHOOK_EVENTS_ERRORS=false # Evento de erros desativado
+      - WEBHOOK_EVENTS_ERRORS_WEBHOOK= # URL de webhook de erros (vazia)
+      - DEL_INSTANCE=false # Deleção de instância desativada
+      - DEL_TEMP_INSTANCES=false # Deleção de instâncias temporárias desativada
+
+  postgres:
+    image: postgres:latest # Imagem do serviço PostgreSQL
+    environment: # Variáveis de ambiente para configuração do PostgreSQL
+      POSTGRES_DB: evolution # Nome do banco de dados
+      POSTGRES_USER: evolution # Nome do usuário do banco de dados
+      POSTGRES_PASSWORD: evolution # Senha do banco de dados
+    networks:
+      - evolution # Nome da rede interna
+    volumes:
+      - evolution_postgres_data:/var/lib/postgresql/data # Volume para persistência dos dados do PostgreSQL
 
 volumes:
-  evolution_instances:
+  evolution_postgres_data: # Volume para persistência dos dados do PostgreSQL
 
 networks:
-  evolution-net:
-    name: evolution-net
-    driver: bridge
+  evolution: # Nome da rede interna
+    external: true # Configurado como rede externa

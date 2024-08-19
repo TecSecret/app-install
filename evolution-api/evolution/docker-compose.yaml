@@ -98,5 +98,5 @@ volumes:
   evolution_postgres_data: # Volume para persistência dos dados do PostgreSQL
 
 networks:
-  evolution: # Nome da rede interna
+  evolution: evolution # Nome da rede interna
     external: true # Configurado como rede externa

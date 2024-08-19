@@ -93,10 +93,3 @@ services:
       - evolution # Nome da rede interna
     volumes:
       - evolution_postgres_data:/var/lib/postgresql/data # Volume para persistência dos dados do PostgreSQL
-
-volumes:
-  evolution_postgres_data: # Volume para persistência dos dados do PostgreSQL
-
-networks:
-  - evolution # Nome da rede interna
-    external: true # Configurado como rede externa

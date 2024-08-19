@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_PASSWORD=PASSWORD
+      - POSTGRES_PASSWORD=99671886
     volumes:
       - postgres_data:/var/lib/postgresql/data
     expose:
@@ -22,8 +22,8 @@ services:
     networks:
       - evolution-net
     environment:
-      - PGADMIN_DEFAULT_EMAIL=EMAIL
-      - PGADMIN_DEFAULT_PASSWORD=PASSWORD  
+      - PGADMIN_DEFAULT_EMAIL=it@rodadecuia.com.br
+      - PGADMIN_DEFAULT_PASSWORD=99671886  
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     ports:
